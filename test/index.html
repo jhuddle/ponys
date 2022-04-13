@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Test - ponys 🐎</title>
+	<meta name="version" content="0.1.0">
+	<meta name="author" content="Jamie Huddlestone">
+	<meta name="description" content="Declarative creation of browser-native web components.">
+	<meta name="robots" content="none">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="">
+	<style>
+
+body { font-family: sans-serif; }
+
+	</style>
+</head>
+<body>
+
+	<h1>ponys 🐎</h1>
+	<h2>Test suite</h2>
+	<p>See console for results</p>
+
+	<div id="container"></div>
+
+	<script type="module">
+
+const attributeTests = {
+	'String': [
+		{
+			should: 'return undefined when no attribute',
+			submit: null,
+			expect: undefined
+		},
+		{
+			should: 'reflect value as string for any value',
+			submit: "null",
+			expect: "null"
+		},
+		{
+			should: '...',
+			submit: "",
+			expect: ""
+		},
+		{
+			should: '...',
+			submit: "pony",
+			expect: "pony"
+		},
+		{
+			should: '...',
+			submit: "['pony']",
+			expect: "['pony']"
+		}
+	],
+	'Object': [
+		{
+			should: 'return undefined when no attribute',
+			submit: null,
+			expect: undefined
+		},
+		{
+			should: 'return undefined when value is empty',
+			submit: "",
+			expect: undefined
+		},
+		{
+			should: 'return null when value is "null"',
+			submit: "null",
+			expect: null
+		},
+		{
+			should: 'return (derived) instance of Object as object',
+			submit: "{test: 'pony'}",
+			expect: {test: "pony"}
+		},
+		{
+			should: '...',
+			submit: "['pony']",
+			expect: ["pony"]
+		},
+		{
+			should: '...',
+			submit: "'pony'",
+			expect: "pony"
+		},
+		{
+			should: '...',
+			submit: "''",
+			expect: ""
+		},
+		{
+			should: '...',
+			submit: "0",
+			expect: 0
+		},
+		{
+			should: '...',
+			submit: "NaN",
+			expect: NaN
+		},
+		{
+			should: '...',
+			submit: "false",
+			expect: false
+		},
+		{
+			should: 'return evaluated result of expression',
+			submit: "1 + 1",
+			expect: 2
+		},
+		{
+			should: '...',
+			submit: "false || true",
+			expect: true
+		},
+		{
+			should: '...',
+			submit: "document.querySelectorAll('div')",
+			expect: document.querySelectorAll('div')
+		}
+	],
+	'Array': [
+		{
+			should: 'return undefined when no attribute',
+			submit: null,
+			expect: undefined
+		},
+		{
+			should: 'return empty array when value is not iterable',
+			submit: "null",
+			expect: []
+		},
+		{
+			should: '...',
+			submit: "",
+			expect: []
+		},
+		{
+			should: '...',
+			submit: "{test: 'pony'}",
+			expect: []
+		},
+		{
+			should: 'return iterable as array',
+			submit: "['pony']",
+			expect: ["pony"]
+		},
+		{
+			should: '...',
+			submit: "Object.entries({test: 'pony'})",
+			expect: [["test", "pony"]]
+		},
+		{
+			should: '...',
+			submit: "'pony'",
+			expect: ["p","o","n","y"]
+		},
+		{
+			should: '...',
+			submit: "document.querySelectorAll('div')",
+			expect: Array.from(document.querySelectorAll('div'))
+		}
+	],
+	'Boolean': [
+		{
+			should: 'return false when no attribute',
+			submit: null,
+			expect: false
+		},
+		{
+			should: 'return true for any value',
+			submit: "null",
+			expect: true
+		},
+		{
+			should: '...',
+			submit: "",
+			expect: true
+		},
+		{
+			should: '...',
+			submit: "false",
+			expect: true
+		},
+		{
+			should: '...',
+			submit: "pony",
+			expect: true
+		},
+	],
+	'Number': [
+		{
+			should: 'return undefined when no attribute',
+			submit: null,
+			expect: undefined
+		},
+		{
+			should: 'return NaN for any non-numeric value',
+			submit: "null",
+			expect: NaN
+		},
+		{
+			should: '...',
+			submit: "",
+			expect: NaN
+		},
+		{
+			should: '...',
+			submit: "NaN",
+			expect: NaN
+		},
+		{
+			should: '...',
+			submit: "pony",
+			expect: NaN
+		},
+		{
+			should: 'return number for any number-parsable value',
+			submit: "0",
+			expect: 0
+		},
+		{
+			should: '...',
+			submit: "1",
+			expect: 1
+		},
+		{
+			should: '...',
+			submit: "-1.5",
+			expect: -1.5
+		},
+		{
+			should: '...',
+			submit: "Infinity",
+			expect: Infinity
+		},
+		{
+			should: '...',
+			submit: "37.5 degrees",
+			expect: 37.5
+		}
+	],
+	'Date': [
+		{
+			should: 'return undefined when no attribute',
+			submit: null,
+			expect: undefined
+		},
+		{
+			should: 'pass the string directly to the constructor',
+			submit: "null",
+			expect: new Date("null")
+		},
+		{
+			should: '...',
+			submit: "",
+			expect: new Date("")
+		},
+		{
+			should: '...',
+			submit: "NaN",
+			expect: new Date("NaN")
+		},
+		{
+			should: '...',
+			submit: "0",
+			expect: new Date("0")
+		},
+		{
+			should: '...',
+			submit: "2022-01-01",
+			expect: new Date("2022-01-01")
+		}
+	]
+}
+
+
+import { Ponys } from '../ponys.js';
+const container = document.querySelector('#container');
+
+
+console.info('--- Running tests ---');
+
+for (let [type, tests] of Object.entries(attributeTests)) {
+	console.log(type + ' attributes:');
+	for (let i = 0; i < tests.length; i++) {
+
+		let name = `ponys-test-${type.toLowerCase()}-${i+1}`;
+		let element = document.createElement(name);
+		container.appendChild(element);
+		if (tests[i].submit != null) {
+			element.setAttribute(`pony${type}`, tests[i].submit);
+		}
+
+		Ponys.define(name, `
+			<script>
+				return {
+					"pony${type}": ${type}
+				}
+			<\/script>
+		`);
+
+		console.log(`	Test ${i+1}: ${tests[i].should || ''}`);
+		console.assert(
+			JSON.stringify(element[`pony${type}`]) === JSON.stringify(tests[i].expect), (`
+	submitted: ${JSON.stringify(tests[i].submit)}
+	expected: ${JSON.stringify(tests[i].expect)}
+	returned: ${JSON.stringify(element[`pony${type}`])}
+			`)
+		);
+	}
+}
+
+console.info('--- Tests finished ---');
+
+	</script>
+</body>
+</html>
