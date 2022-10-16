@@ -1,0 +1,83 @@
+<!-- csv-table.html -->
+
+<table></table>
+
+<script>
+	import Papa from 'https://cdn.jsdelivr.net/npm/papaparse/+esm';
+
+	export default class extends HTMLElement {
+
+		sortDir = 1  // +ve = ascending, -ve = descending
+		sortCol = null
+
+		render()
+		{
+			let table = this.$('table');
+			table.innerHTML = '';
+
+			if (this.header && this.data.length) {
+				let row = table.createTHead().insertRow();
+				this.data[0].forEach((value, col) => {
+					let cell = document.createElement('th');
+					cell.scope = 'col';
+					cell.tabIndex = 0;
+					cell.setAttribute('role', 'button');
+					cell.title = 'Sort by '+ value;
+					cell.textContent = value;
+					cell.onclick = () => {
+						this.sortDir = this.sortCol == col ? -this.sortDir : 1;
+						this.sortCol = col;
+						this.render();
+					};
+					cell.onkeydown = event => event.key === 'Enter' ? cell.click() : null;
+					row.append(cell);
+				});
+			}
+
+			let tbody = table.createTBody();
+			let sortFunc = (a,b) => this.sortDir * (a[this.sortCol] > b[this.sortCol] ? 1 : -1);
+			for (let record of this.data.slice(this.header).sort(sortFunc)) {
+				let row = tbody.insertRow();
+				record.forEach(value => row.insertCell().textContent = value);
+			}
+		}
+
+		connectedCallback()
+		{
+			this.data = Papa.parse(this.textContent, {
+				skipEmptyLines: true,
+				transform: value => value.trim()
+			}).data;
+
+			this.header = this.hasAttribute('header');
+
+			this.render();
+		}
+
+	}
+</script>
+
+<style>
+
+	:host {
+		display: table;
+	}
+
+	:host([border]) * {
+		border: 1px solid gainsboro;
+	}
+
+	table {
+		border-collapse: collapse;
+		text-align: left;
+	}
+
+	th, td {
+		padding: 0.25em 0.5em;
+	}
+
+	th {
+		cursor: pointer;
+	}
+
+</style>

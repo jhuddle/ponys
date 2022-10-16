@@ -1,0 +1,94 @@
+<!-- modal-container.html -->
+
+<div
+	id="container"
+	onclick="event.stopPropagation(); host.close()"
+	onkeydown="event.stopPropagation(); if (event.key === 'Escape') host.close()"
+>
+	<article
+		id="modal"
+		part="modal"
+		aria-modal="true"
+		tabindex="-1"
+		onclick="event.stopPropagation()"
+	>
+
+		<slot></slot>
+
+		<div
+			id="controls"
+			part="controls"
+		>
+			<button type="button"
+				title="Close"
+				onclick="host.close()"
+			>
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</article>
+</div>
+
+<script>
+	export default class extends HTMLElement {
+
+		close() {
+			this.hidden = true;
+		}
+
+	}
+</script>
+
+<style>
+
+	:host {
+		z-index: 9999;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: rgba(0, 0, 0, 0.5);
+	}
+
+	#container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+	}
+
+	#modal {
+		overflow-y: auto;
+		overscroll-behavior: none;
+		position: relative;
+		background: white;
+	}
+
+	#controls {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 3rem;
+		height: 3rem;
+		font-size: 2rem;
+	}
+
+	button {  /* reset */
+		cursor: pointer;
+		border: unset;
+		margin: unset;
+		padding: unset;
+		background: unset;
+		color: unset;
+		font: unset;
+	}
+	button {
+		position: fixed;
+		width: inherit;
+		height: inherit;
+	}
+
+</style>

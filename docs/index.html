@@ -1,0 +1,650 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ponys 🦄</title>
+  <meta name="version" content="0.3.0">
+  <meta name="author" content="jhuddle">
+  <meta name="description" content="Declarative creation of browser-native web components.">
+  <meta name="robots" content="none">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Ace -->
+  <script src="https://cdn.jsdelivr.net/npm/ace-builds@1/src-min-noconflict/ace.js"></script>
+
+  <style>
+
+@import url(https://fonts.bunny.net/css?family=Inter:400,700);
+
+/*-- Page elements --*/
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+:root {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+}
+
+a {
+  color: inherit;
+}
+
+header {
+  text-align: center;
+}
+
+h1 {
+  color: white;
+  text-shadow: 0.125em 0.125em 0.25em rgba(0, 0, 0, 0.5);
+}
+
+main {
+  overflow: hidden;
+}
+
+details {
+  margin: 1rem 0;
+}
+summary {
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+button, .button {
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  border: 1px solid currentcolor;
+  padding: 0.5em 1em;
+  background: white;
+  color: unset;
+  font: unset;
+  text-decoration: none;
+}
+
+blockquote {
+  margin: 1rem;
+  border-left: 2px solid gainsboro;
+  padding-left: 1rem;
+}
+
+/*-- IDs / Classes --*/
+
+#background {
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to bottom right, dodgerblue, hotpink) center/cover no-repeat;
+}
+
+#container {
+  max-width: max(800px, 100vmin);
+  margin: auto;
+}
+
+.code {
+  display: block;
+}
+
+.output {
+  position: relative;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  padding: 1em;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.ace_bracket {
+  display: none;
+}
+
+.anim-pony {
+  display: inline-block;
+  user-select: none;
+  transition: transform 0.4s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .anim-pony:hover {
+    transform: rotate(15deg) translate(-0.1em, -0.1em);
+  }
+}
+
+/*-- Custom elements --*/
+
+:not(:defined) {
+  display: none;
+}
+
+  </style>
+</head>
+<body>
+
+  <div id="background"></div>
+  <div id="container">
+
+    <header>
+      <h1 style="font-size: 16vmin; text-align: center;">
+        Ponys <span class="anim-pony">🦄</span>
+      </h1>
+      <h2>Declarative creation of browser-native web&nbsp;components.</h2>
+      <p>
+        <a download
+          class="button" style="margin: 0.5em; color: white; background: crimson"
+          href="https://raw.githubusercontent.com/jhuddle/ponys/main/ponys.js"
+        >
+          <b>Download</b> <small>(source, 1.7 kB)</small>
+        </a>
+        <a download
+          class="button" style="margin: 0.5em; color: white; background: seagreen"
+          href="https://raw.githubusercontent.com/jhuddle/ponys/main/miniature-ponys.js"
+        >
+          <b>Download</b> <small>(minified, 0.9 kB)</small>
+        </a>
+      </p>
+      <p>
+        <b>CDN: </b>
+        <input type="text" readonly class="button" style="cursor: text; width: min(32em, 75%)"
+          value="https://cdn.jsdelivr.net/gh/jhuddle/ponys/miniature-ponys.js"
+        >
+        <button type="button"
+          title="Copy URL"
+          style="all: unset; outline: revert; cursor: pointer"
+          onclick="previousElementSibling.select(); document.execCommand('copy')"
+        >
+          <span aria-hidden="true">📄</span>
+        </button>
+      </p>
+      <p>
+        <b>GitHub: </b>
+        <a target="github" href="https://github.com/jhuddle/ponys">
+          https://github.com/jhuddle/ponys
+        </a>
+      </p>
+    </header>
+
+    <main>
+
+      <h1>Ponys simplifies the process of creating custom&nbsp;elements.</h1>
+
+      <p>
+        Making new <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">browser-native web components</a> typically comes with a lot of boilerplate:
+      </p>
+<script type="text/plain" class="code" mode="javascript">
+/* hello-world.js */
+
+const templateString = `
+  Hello, <slot>world</slot>!
+`;
+const templateElement = document.createElement('template');
+templateElement.innerHTML = templateString;
+
+class HelloWorld extends HTMLElement {
+
+  constructor() {
+    let content = templateElement.content.cloneNode(true);
+    let shadowRoot = this.attachShadow({mode: 'open'});
+    shadowRoot.append(content);
+  }
+
+}
+
+customElements.define('hello-world', HelloWorld);
+</script>
+      <p>
+        when all you really wanted to do was write this once somewhere:
+      </p>
+<script type="text/plain" class="code">
+<template name="hello-world">
+  Hello, <slot>world</slot>!
+</template>
+</script>
+      <p>
+        so that you can use <em>this</em> everywhere else:
+      </p>
+<script type="text/plain" class="code input">
+<!-- Edit me! -->
+
+<hello-world></hello-world>
+
+<hello-world>everypony</hello-world>
+</script>
+<div class="output"></div>
+      <p>
+        Wouldn't it be cool if browsers let you do that? 🤔
+      </p>
+
+      <h1>
+        This is what Ponys allows you to do - in three different ways!
+      </h1>
+
+      <ul>
+        <li>
+          <p>
+            Detect any <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots"><code>&lt;template&gt;</code></a> elements that have a <code>name</code> attribute, and promote them to <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">custom elements</a>:
+          </p>
+<div class="code">
+<script type="module">
+  import Ponys from './ponys.js';
+  Ponys.defineAll();
+</script>
+
+...
+
+<template name="hello-world">
+  Hello, <slot>world</slot>!
+</template>
+</div>
+        </li>
+        <li>
+          <p>
+            Define a custom element by passing its name and its content as a string:
+          </p>
+<script type="text/plain" class="code" mode="javascript">
+/* app.js */
+
+import Ponys from './ponys.js';
+
+Ponys.define('hello-world', 'Hello, <slot>world</slot>!');
+</script>
+        </li>
+        <li>
+          <p>
+            Import the content for a new custom element from a separate file:
+          </p>
+<script type="text/plain" class="code">
+<!-- hello-world.html -->
+
+Hello, <slot>world</slot>!
+</script>
+<br>
+<script type="text/plain" class="code" mode="javascript">
+/* app.js */
+
+import Ponys from './ponys.js';
+
+Ponys.import('hello-world', './components/hello-world.html');
+</script>
+        </li>
+      </ul>
+      <p>
+        That's correct: you can inline your templates server-side, create them dynamically, or import them as single-file components - each of these snippets results in the same custom element.
+      </p>
+
+      <h1>But what about interactivity, styling, etc?</h1>
+
+      <p>
+        Any class you can use with <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define"><code>customElements.define()</code></a>, you can use with Ponys. Just add a <code>&lt;script&gt;</code> tag inside your template tag/string/file, and <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export"><code>export</code></a> the class that contains your properties and methods as default - no constructor required.
+      </p>
+      <p>
+        Likewise with <code>&lt;style&gt;</code>! Ponys will put your component's elements behind a <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM">shadow root</a> wherever possible, so your CSS is fully encapsulated.
+      </p>
+      <p>
+        Here's an example of an inline template with a <code>&lt;script&gt;</code> tag, which extends the built-in <code>&lt;button&gt;</code> element:
+      </p>
+
+      <h2>Counter button</h2>
+
+      <details open>
+        <summary>See the code</summary>
+<div class="code">
+<template name="counter-button" extends="button">
+
+  Count: <b id="count"></b>
+
+  <script>
+    export default class extends HTMLButtonElement {
+
+      count = 0
+
+      update() {
+        this.$('#count').textContent = this.count;
+      }
+
+      increment() {
+        this.count++;
+        this.update();
+      }
+
+      connectedCallback() {
+        this.onclick = event => this.increment();
+        this.update();
+      }
+
+    }
+  </script>
+
+</template>
+</div>
+      </details>
+<script type="text/plain" class="code input">
+<style>
+  [is="counter-button"] {
+    font-size: 1rem;
+    font-family: monospace;
+  }
+</style>
+
+<button is="counter-button" style="color: white; background: crimson"></button>
+<button is="counter-button" style="color: white; background: seagreen"></button>
+</script>
+<div class="output"></div>
+      <p>
+        Note also that this template uses a special convenience method on the 'host' element of our component: <code>this.$('#count')</code> is equivalent to <code>this.shadowRoot.querySelector('#count')</code>. And what's more, every element defined in the template <em>also</em> has access to this method - as well as <code>$$</code> for <code>querySelectorAll</code>, plus a <code>host</code> property that points directly at the host element - making it really easy for elements to reference each other within the current component.
+      </p>
+      <p>
+        With this capability, you can do a lot with relatively little JavaScript. Here's another more complicated example, this time imported as a single-file component:
+      </p>
+
+      <h2>Modal</h2>
+
+      <details open>
+        <summary>See the code</summary>
+<script type="text/plain" class="code" name="modal-container"></script>
+<br>
+<script type="text/plain" class="code" mode="javascript">
+/* app.js */
+
+import Ponys from './ponys.js';
+
+Ponys.import('modal-container', './components/modal-container.html');
+</script>
+      </details>
+<script type="text/plain" class="code input">
+<style>
+  modal-container {
+    transition: all 0.2s linear;
+    backdrop-filter: blur(2px);
+  }
+  modal-container[hidden] {
+    display: unset;
+    visibility: hidden;
+    opacity: 0;
+  }
+  modal-container::part(modal) {
+    max-width: 100vmin;
+    margin: 2rem;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+  }
+</style>
+
+<button type="button" onclick="nextElementSibling.hidden = false">Open modal</button>
+
+<modal-container hidden>
+  <b>What the frameworks say:</b>
+  <blockquote>
+    Well, well, well. It seems we have some <em>neigh</em>-sayers in the audience.
+    Who is so ignorant as to challenge the magical ability of the
+    Great and Powerful Trixie? Do they not know that they're in the
+    presence of the most magical unicorn in all of Equestria?
+  </blockquote>
+  <button type="button" onclick="parentElement.hidden = true">Close</button>
+</modal-container>
+</script>
+<div class="output"></div>
+      <p>
+        Try adding some of the other custom elements defined above inside the <code>&lt;modal-container&gt;</code> tag - you'll see they work perfectly alongside the other elements rendered in our template's <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots"><code>&lt;slot&gt;</code></a>.
+      </p>
+
+      <h1>How can I use this with other JS code though?</h1>
+
+      <p>
+        Just <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"><code>import</code></a> it! The <code>&lt;script&gt;</code> tag in your template is treated as being of <code>type="module"</code>, which means you can use any library that's written as an <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">ESM module</a>: of course, you can import modules directly from your site's static assets, but you could also fetch libraries as needed from a CDN such as <a target="cdn" href="https://www.skypack.dev/">Skypack</a> or <a target="cdn" href="https://esm.run/">esm.run</a> by jsDelivr.
+      </p>
+      <p>
+        That's the approach taken in the example below: here, we import an ESM build of <a target="github" href="https://github.com/mholt/PapaParse">PapaParse</a> from a CDN, in order to parse our custom element's text content as a CSV string. The rest of our code builds an HTML table from the resulting data object... click on the headers to sort by column!
+      </p>
+
+      <h2>CSV table</h2>
+
+      <details open>
+        <summary>See the code</summary>
+<script type="text/plain" class="code" name="csv-table"></script>
+<br>
+<script type="text/plain" class="code" mode="javascript">
+/* app.js */
+
+import Ponys from './ponys.js';
+
+Ponys.import('csv-table', './components/csv-table.html');
+</script>
+      </details>
+<script type="text/plain" class="code input">
+<csv-table
+  header
+  border
+  style="
+    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+    background: white;
+    color: crimson;
+  "
+>
+  Character;Kind;Element of Harmony
+  Twilight Sparkle;Alicorn;Magic
+  Pinkie Pie;Earth;Laughter
+  Fluttershy;Pegasus;Kindness
+  Rainbow Dash;Pegasus;Loyalty
+  Rarity;Unicorn;Generosity
+  Applejack;Earth;Honesty
+</csv-table>
+</script>
+<div class="output"></div>
+
+      <h1>Nice, but I'm more familiar with reactive components...</h1>
+
+      <p>
+        No worries: the progressive-enhancement ecosystem has got you covered. Here's the exact same CSV table, but written with <a target="github" href="https://github.com/vuejs/petite-vue">petite-vue</a>; if you know regular Vue, you'll already know how it works. You could do much the same thing with <a target="github" href="https://github.com/alpinejs/alpine">Alpine.js</a> too, for example. Or perhaps my next side-project... 😉
+      </p>
+
+      <h2>CSV table using petite-vue</h2>
+
+      <details open>
+        <summary>See the code</summary>
+<script type="text/plain" class="code" name="csv-table-vue"></script>
+<br>
+<script type="text/plain" class="code" mode="javascript">
+/* app.js */
+
+import Ponys from './ponys.js';
+
+Ponys.import('csv-table-vue', './components/csv-table-vue.html');
+</script>
+      </details>
+<script type="text/plain" class="code input">
+<csv-table-vue
+  header
+  border
+  style="
+    box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+    background: white;
+    color: seagreen;
+  "
+>
+  Character;Kind;Element of Harmony
+  Twilight Sparkle;Alicorn;Magic
+  Pinkie Pie;Earth;Laughter
+  Fluttershy;Pegasus;Kindness
+  Rainbow Dash;Pegasus;Loyalty
+  Rarity;Unicorn;Generosity
+  Applejack;Earth;Honesty
+</csv-table-vue>
+</script>
+<div class="output"></div>
+
+      <h1>But how do I...</h1>
+
+      <ul>
+        <li>
+          <p><i>...choose not to use a shadow root?</i></p>
+          <p>You can prevent Ponys from creating a shadow root on your custom element with the following:</p>
+<script type="text/plain" class="code">
+<script>
+  export default class extends HTMLElement {
+
+    static disabledFeatures = ['shadow']
+
+    ...
+</script>
+        </li>
+        <li>
+          <p><i>...stop the flash of unstyled content (FOUC)?</i></p>
+          <p>The easy way to handle this for all your custom elements at once: add the following CSS to your page...</p>
+<script type="text/plain" class="code" mode="css">
+:not(:defined) {
+  display: none;
+}
+</script>
+        </li>
+        <li>
+          <p><i>...reflect properties as attributes, and vice-versa?</i></p>
+          <p>You <em>could</em> use a bunch of <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#defining_getters_and_setters">getter and setter methods</a> for this...</p>
+<script type="text/plain" class="code">
+<script>
+  export default class extends HTMLElement {
+
+    // For strings, numbers, etc.
+    set color(value) {
+      value != null ? this.setAttribute('color', value) : this.removeAttribute('color')
+    }
+    get color() {
+      return this.hasAttribute('color')
+    }
+
+    // For booleans
+    set hasCutieMark(value) {
+      value ? this.setAttribute('has-cutie-mark', '') : this.removeAttribute('has-cutie-mark')
+    }
+    get hasCutieMark() {
+      return this.hasAttribute('has-cutie-mark')
+    }
+
+    ...
+</script>
+          <p><strong>...but I wouldn't!</strong> Consider using <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes">data attributes</a> with your element's <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset"><code>dataset</code></a> instead: it's what they're there for.</p>
+        </li>
+        <li>
+          <p><i>...trigger behavior when an attribute/property is changed?</i></p>
+          <p>Using the data attributes suggested by the example above, you could try something like this:</p>
+<script type="text/plain" class="code">
+<script>
+  export default class extends HTMLElement {
+
+    static observedAttributes = ['data-color', 'data-has-cutie-mark']
+
+    attributeChangedCallback(name, previousValue, value) {
+      switch (name) {
+        case 'data-color'          : return this.changeColor(value)
+        case 'data-has-cutie-mark' : return this.setCutieMark(value)
+      }
+    }
+
+    changeColor(value) { ... }
+
+    setCutieMark(value) { ... }
+
+    ...
+</script>
+          <p>For more general information and advice on working with web components, you may wish to consult the relevant pages on <a target="webdev" href="https://web.dev/web-components/">web.dev</a> from Google, or <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">MDN</a> from Mozilla; both are excellent resources.</p>
+        </li>
+      </ul>
+
+      <h1>OK, I'm sold. But... why the ponies?</h1>
+
+      <p>
+        Why not ponies? Ponies are awesome. 🦄
+      </p>
+      <p>
+        But to answer your question fully, there are a few actual reasons also:
+      </p>
+      <ul>
+        <li>
+          The word "ponies" is what I imagined may come out when small children try to say "components"
+        </li>
+        <li>
+          The spelling "Ponys" was chosen as a tribute to my German-speaking friends - plus it was free on npm
+        </li>
+        <li>
+          And lastly, but most importantly: as a nod to the ideal of the <a target="github" href="https://ponyfill.com">ponyfill</a>
+        </li>
+      </ul>
+      <p>
+        With this project, my aim was to create a tool that would let me write web components the way I wish <em>browsers</em> would let me write web components; as such, the Ponys API is deliberately close to existing web standards, and constitutes my proposal for the future syntax/behavior of declarative web components.
+      </p>
+      <p>
+        My wish, therefore, is that Ponys will one day act as the ponyfill for the native API it suggests; I hope you find it convenient and joyful to use in the meantime. 🌈
+      </p>
+      <p style="float:right">
+        <i>- <a target="github" href="https://github.com/jhuddle">jhuddle</a></i>
+      </p>
+
+    </main>
+
+  </div>
+  <script type="module">
+
+import Ponys from './ponys.js';
+
+let codeBoxes = document.querySelectorAll(`.code`);
+for (let input of codeBoxes) {
+  let name = input.getAttribute('name');
+  let base = input.getAttribute('extends');
+  let mode = input.getAttribute('mode') || 'html';
+  let isInput = input.classList.contains('input');
+  let content = input.innerHTML;
+  let editor = ace.edit(input, {
+    mode: 'ace/mode/'+ mode,
+    theme: 'ace/theme/solarized_'+ (isInput ? 'light' : 'dark'),
+    tabSize: 2,
+    showGutter: false,
+    showPrintMargin: false,
+    highlightActiveLine: false,
+    highlightSelectedWord: false,
+  });
+  editor.renderer.setMargin(0,0,8,8);
+  editor.renderer.setScrollMargin(8,8,0,0);
+  let promise = name ? fetch(`./components/${name}.html`) : Promise.reject();
+  promise.then(response => response.ok ? response.text() : Promise.reject())
+    .then(text => {
+      Ponys.define(name, text, base && {extends: base});
+      editor.setValue(text.trim(), -1);
+    })
+    .catch(() => {
+      editor.setValue(content.trim(), -1);
+    })
+    .finally(() => {
+      if (isInput) {
+        let update = () => {
+          input.nextElementSibling.innerHTML = editor.getValue();
+          editor.setOptions({maxLines: editor.session.getLength()});
+        };
+        editor.session.on('change', update);
+        update();
+      }
+      else {
+        editor.setReadOnly(true);
+        editor.setOptions({maxLines: editor.session.getLength()});
+      }
+    })
+}
+
+  </script>
+</body>
+</html>

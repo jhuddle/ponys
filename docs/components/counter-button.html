@@ -1,0 +1,25 @@
+<!-- counter-button.html -->
+
+Count: <b id="count"></b>
+
+<script>
+	export default class extends HTMLButtonElement {
+
+		count = 0
+
+		update() {
+			this.$('#count').textContent = this.count;
+		}
+
+		increment() {
+			this.count++;
+			this.update();
+		}
+
+		connectedCallback() {
+			this.onclick = event => this.increment();
+			this.update();
+		}
+
+	}
+</script>

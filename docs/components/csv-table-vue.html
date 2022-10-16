@@ -1,0 +1,83 @@
+<!-- csv-table-vue.html -->
+
+<table>
+	<thead v-if="header">
+		<tr>
+			<th v-for="value, col in data[0]"
+				scope="col"
+				tabindex="0"
+				role="button"
+				:title="'Sort by '+ value"
+				@click="sort(col)"
+				@keydown="$event.key === 'Enter' && $el.click()"
+			>{{ value }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr v-for="row in data.slice(header)">
+			<td v-for="value in row">{{ value }}</td>
+		</tr>
+	</tbody>
+</table>
+
+<script>
+	import Papa from 'https://cdn.jsdelivr.net/npm/papaparse/+esm';
+	import * as PetiteVue from 'https://cdn.jsdelivr.net/npm/petite-vue/+esm';
+
+	export default class extends HTMLElement {
+
+		connectedCallback()
+		{
+			const host = this;
+
+			PetiteVue.createApp({
+
+				data: Papa.parse(host.textContent, {
+					skipEmptyLines: true,
+					transform: value => value.trim()
+				}).data,
+
+				get header() {
+					return host.hasAttribute('header');
+				},
+
+				sortDir: 1,  // +ve = ascending, -ve = descending
+				sortCol: null,
+
+				sort(col) {
+					this.sortDir = this.sortCol === col ? -this.sortDir : 1;
+					this.sortCol = col;
+					let sortFunc = (a,b) => this.sortDir * (a[this.sortCol] > b[this.sortCol] ? 1 : -1);
+					this.data = [this.data[0], ...this.data.slice(1).sort(sortFunc)];
+				},
+
+			}).mount(host.$('table'));
+		}
+
+	}
+</script>
+
+<style>
+
+	:host {
+		display: table;
+	}
+
+	:host([border]) * {
+		border: 1px solid gainsboro;
+	}
+
+	table {
+		border-collapse: collapse;
+		text-align: left;
+	}
+
+	th, td {
+		padding: 0.25em 0.5em;
+	}
+
+	th {
+		cursor: pointer;
+	}
+
+</style>
