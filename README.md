@@ -1,7 +1,9 @@
 # Ponys 🦄
 Declarative creation of browser-native web components.
 
-**CDN:** [https://cdn.jsdelivr.net/gh/jhuddle/ponys/miniature-ponys.js](https://cdn.jsdelivr.net/gh/jhuddle/ponys/miniature-ponys.js)
+**CDN:** [`https://cdn.jsdelivr.net/gh/jhuddle/ponys/miniature-ponys.js`](https://cdn.jsdelivr.net/gh/jhuddle/ponys/miniature-ponys.js)
+
+**npm:** `npm i ponys`
 
 ## Ponys simplifies the process of creating custom elements.
 

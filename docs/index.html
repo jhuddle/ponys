@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Ponys 🦄</title>
-  <meta name="version" content="0.3.0">
+  <meta name="version" content="0.3.1">
   <meta name="author" content="jhuddle">
   <meta name="description" content="Declarative creation of browser-native web components.">
   <meta name="robots" content="none">
@@ -165,6 +165,19 @@ blockquote {
         >
         <button type="button"
           title="Copy URL"
+          style="all: unset; outline: revert; cursor: pointer"
+          onclick="previousElementSibling.select(); document.execCommand('copy')"
+        >
+          <span aria-hidden="true">📄</span>
+        </button>
+      </p>
+      <p>
+        <b>npm: </b>
+        <input type="text" readonly class="button" style="cursor: text; width: min(32em, 75%)"
+          value="npm i ponys"
+        >
+        <button type="button"
+          title="Copy command"
           style="all: unset; outline: revert; cursor: pointer"
           onclick="previousElementSibling.select(); document.execCommand('copy')"
         >
