@@ -1,4 +1,4 @@
-/* ponys v0.3
+/* ponys v0.3.2
  * 2022 jhuddle
  *
  * Declarative creation of browser-native web components.
@@ -42,12 +42,14 @@ export default class {
 		});
 	}
 
-	static defineAll(container=_)
+	static defineAll(container = _)
 	{
 		return Promise.allSettled(
-			[...container.querySelectorAll('template')].map(template => {
+			[...container.querySelectorAll('template[name]')].map(template => {
 				let options = {};
-				for (let {name, value} of template.attributes) options[name] = value;
+				for (let {name, value} of template.attributes) {
+					options[name] = value;
+				}
 				return this.define(options.name, template, options);
 			})
 		);
