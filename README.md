@@ -20,6 +20,7 @@ templateElement.innerHTML = templateString;
 class HelloWorld extends HTMLElement {
 
   constructor() {
+    super();
     let content = templateElement.content.cloneNode(true);
     let shadowRoot = this.attachShadow({mode: 'open'});
     shadowRoot.append(content);

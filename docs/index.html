@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Ponys 🦄</title>
-  <meta name="version" content="0.3.3">
+  <meta name="version" content="0.3.4">
   <meta name="author" content="jhuddle">
   <meta name="description" content="Declarative creation of browser-native web components.">
   <meta name="robots" content="none">
@@ -211,6 +211,7 @@ templateElement.innerHTML = templateString;
 class HelloWorld extends HTMLElement {
 
   constructor() {
+    super();
     let content = templateElement.content.cloneNode(true);
     let shadowRoot = this.attachShadow({mode: 'open'});
     shadowRoot.append(content);

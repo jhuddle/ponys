@@ -1,4 +1,4 @@
-/* ponys v0.3.3
+/* ponys v0.3.4
  * 2022 jhuddle
  *
  * Declarative creation of browser-native web components.
