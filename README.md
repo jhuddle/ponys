@@ -75,12 +75,24 @@ Ponys.define('hello-world', 'Hello, <slot>world</slot>!');
 
 Hello, <slot>world</slot>!
 ```
+  \- either through your app's JS:
 ```js
 /* app.js */
 
 import Ponys from './ponys.js';
 
 Ponys.import('hello-world', './components/hello-world.html');
+```
+  \- or in your HTML, by adding a `src` attribute to a named template element:
+```html
+<script type="module">
+  import Ponys from './ponys.js';
+  Ponys.defineAll();
+</script>
+
+...
+
+<template name="hello-world" src="./components/hello-world.html"></template>
 ```
 That's correct: you can inline your templates server-side, create them dynamically, or import them as single-file components - each of these snippets results in the same custom element.
 
@@ -90,7 +102,7 @@ Any class you can use with [`customElements.define()`](https://developer.mozilla
 
 Likewise with `<style>`! Ponys will put your component's elements behind a [shadow root](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) wherever possible, so your CSS is fully encapsulated.
 
-Here's an example of an inline template with a `<script>` tag, which extends the built-in `<button>` element:
+Here's an example of an inline template with a `<script>` tag, which extends the built-in `<button>` element ([not supported in Safari](https://bugs.webkit.org/show_bug.cgi?id=182671)):
 
 **Counter button**
 ```html

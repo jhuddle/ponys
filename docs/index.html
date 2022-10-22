@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Ponys 🦄</title>
-  <meta name="version" content="0.3.2">
+  <meta name="version" content="0.3.3">
   <meta name="author" content="jhuddle">
   <meta name="description" content="Declarative creation of browser-native web components.">
   <meta name="robots" content="none">
@@ -149,7 +149,7 @@ blockquote {
           class="button" style="margin: 0.5em; color: white; background: crimson"
           href="https://raw.githubusercontent.com/jhuddle/ponys/main/ponys.js"
         >
-          <b>Download</b> <small>(source, 1.7 kB)</small>
+          <b>Download</b> <small>(source, 1.8 kB)</small>
         </a>
         <a download
           class="button" style="margin: 0.5em; color: white; background: seagreen"
@@ -286,7 +286,9 @@ Ponys.define('hello-world', 'Hello, <slot>world</slot>!');
 
 Hello, <slot>world</slot>!
 </script>
-<br>
+          <p>
+            - either though your app's JS:
+          </p>
 <script type="text/plain" class="code" mode="javascript">
 /* app.js */
 
@@ -294,6 +296,19 @@ import Ponys from './ponys.js';
 
 Ponys.import('hello-world', './components/hello-world.html');
 </script>
+          <p>
+            - or in your HTML, by adding a <code>src</code> attribute to a named template element:
+          </p>
+<div class="code">
+<script type="module">
+  import Ponys from './ponys.js';
+  Ponys.defineAll();
+</script>
+
+...
+
+<template name="hello-world" src="./components/hello-world.html"></template>
+</div>
         </li>
       </ul>
       <p>
@@ -309,7 +324,7 @@ Ponys.import('hello-world', './components/hello-world.html');
         Likewise with <code>&lt;style&gt;</code>! Ponys will put your component's elements behind a <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM">shadow root</a> wherever possible, so your CSS is fully encapsulated.
       </p>
       <p>
-        Here's an example of an inline template with a <code>&lt;script&gt;</code> tag, which extends the built-in <code>&lt;button&gt;</code> element:
+        Here's an example of an inline template with a <code>&lt;script&gt;</code> tag, which extends the built-in <code>&lt;button&gt;</code> element (<a target="spec" href="https://bugs.webkit.org/show_bug.cgi?id=182671">not supported in Safari</a>):
       </p>
 
       <h2>Counter button</h2>

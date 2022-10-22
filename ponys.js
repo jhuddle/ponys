@@ -1,4 +1,4 @@
-/* ponys v0.3.2
+/* ponys v0.3.3
  * 2022 jhuddle
  *
  * Declarative creation of browser-native web components.
@@ -50,7 +50,9 @@ export default class {
 				for (let {name, value} of template.attributes) {
 					options[name] = value;
 				}
-				return this.define(options.name, template, options);
+				return options.src?
+					this.import(options.name, options.src, options):
+					this.define(options.name, template, options);
 			})
 		);
 	}
