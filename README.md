@@ -50,51 +50,61 @@ Wouldn't it be cool if browsers let you do that? 🤔
 ## This is what Ponys allows you to do - in three different ways!
 
 - Detect any [`<template>`](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_templates_and_slots) elements that have a `name` attribute, and promote them to [custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements):
-```html
-<script type="module">
-  import Ponys from './ponys.js';
-  Ponys.defineAll();
-</script>
 
-...
+  ```html
+  <script type="module">
+    import Ponys from './ponys.js';
+    Ponys.defineAll();
+  </script>
 
-<template name="hello-world">
-  Hello, <slot>world</slot>!
-</template>
-```
+  ...
+
+  <template name="hello-world">
+    Hello, <slot>world</slot>!
+  </template>
+  ```
+
 - Define a custom element by passing its name and its content as a string:
-```js
-/* app.js */
 
-import Ponys from './ponys.js';
+  ```js
+  /* app.js */
 
-Ponys.define('hello-world', 'Hello, <slot>world</slot>!');
-```
-- Import the content for a new custom element from a separate file:
-```html
-<!-- hello-world.html -->
-
-Hello, <slot>world</slot>!
-```
-  \- either through your app's JS:
-```js
-/* app.js */
-
-import Ponys from './ponys.js';
-
-Ponys.import('hello-world', './components/hello-world.html');
-```
-  \- or in your HTML, by adding a `src` attribute to a named template element:
-```html
-<script type="module">
   import Ponys from './ponys.js';
-  Ponys.defineAll();
-</script>
 
-...
+  Ponys.define('hello-world', 'Hello, <slot>world</slot>!');
+  ```
 
-<template name="hello-world" src="./components/hello-world.html"></template>
-```
+- Import the content for a new custom element from a separate file:
+
+  ```html
+  <!-- hello-world.html -->
+
+  Hello, <slot>world</slot>!
+  ```
+
+  - either through your app's JS:
+
+    ```js
+    /* app.js */
+
+    import Ponys from './ponys.js';
+
+    Ponys.import('hello-world', './components/hello-world.html');
+    ```
+
+  - or in your HTML, by adding a `src` attribute to a named template element:
+
+    ```html
+    <script type="module">
+      import Ponys from './ponys.js';
+      Ponys.defineAll();
+    </script>
+
+    ...
+
+    <template name="hello-world" src="./components/hello-world.html"></template>
+    ```
+
 That's correct: you can inline your templates server-side, create them dynamically, or import them as single-file components - each of these snippets results in the same custom element.
 
 ## But what about interactivity, styling, etc?
