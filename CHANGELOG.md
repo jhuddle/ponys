@@ -3,6 +3,9 @@ Declarative creation of browser-native web components.
 
 ## Changelog
 
+- **0.3.5**
+  - Docs: fixed indentation, getter/setter example
+
 - **0.3.4**
   - Docs: fixed example custom element class to include `super()` in constructor
 

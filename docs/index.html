@@ -554,7 +554,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
       value != null ? this.setAttribute('color', value) : this.removeAttribute('color')
     }
     get color() {
-      return this.hasAttribute('color')
+      return this.getAttribute('color')
     }
 
     // For booleans
@@ -567,7 +567,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
 
     ...
 </script>
-          <p><strong>...but I wouldn't!</strong> Consider using <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes">data attributes</a> with your element's <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset"><code>dataset</code></a> instead: it's what they're there for.</p>
+          <p>...but I wouldn't! Consider using <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes">data attributes</a> with your element's <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset"><code>dataset</code></a> instead: it's what they're there for.</p>
         </li>
         <li>
           <p><i>...trigger behavior when an attribute/property is changed?</i></p>

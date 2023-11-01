@@ -572,7 +572,7 @@ You _could_ use a bunch of getter and setter methods for this...
       value != null ? this.setAttribute('color', value) : this.removeAttribute('color')
     }
     get color() {
-      return this.hasAttribute('color')
+      return this.getAttribute('color')
     }
 
     // For booleans
@@ -587,7 +587,7 @@ You _could_ use a bunch of getter and setter methods for this...
 
 </script>
 ```
-**...but I wouldn't!** Consider using [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) with your element's [`dataset`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset) instead: it's what they're there for.
+...but I wouldn't! Consider using [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) with your element's [`dataset`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset) instead: it's what they're there for.
 
 - _...trigger behavior when an attribute/property is changed?_
 
