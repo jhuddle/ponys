@@ -109,11 +109,11 @@ That's correct: you can inline your templates server-side, create them dynamical
 
 ## But what about interactivity, styling, etc?
 
-Any class you can use with [`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define), you can use with Ponys. Just add a `<script>` tag inside your template tag/string/file, and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) the class that contains your properties and methods as default - no constructor required.
+Any class you can use with [`customElements.define()`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define), you can use with Ponys. Just add a `<script>` tag with a `setup` attribute inside your template tag/string/file, and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) the class that contains your properties and methods as default - no constructor required.
 
 Likewise with `<style>`! Ponys will put your component's elements behind a [shadow root](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) wherever possible, so your CSS is fully encapsulated.
 
-Here's an example of an inline template with a `<script>` tag, which extends the built-in `<button>` element ([not supported in Safari](https://bugs.webkit.org/show_bug.cgi?id=182671)):
+Here's an example of an inline template with a `<script setup>` tag, which extends the built-in `<button>` element ([not supported in Safari](https://bugs.webkit.org/show_bug.cgi?id=182671)):
 
 **Counter button**
 ```html
@@ -121,7 +121,7 @@ Here's an example of an inline template with a `<script>` tag, which extends the
 
   Count: <b id="count"></b>
 
-  <script>
+  <script setup>
     export default class extends HTMLButtonElement {
 
       count = 0
@@ -193,7 +193,7 @@ With this capability, you can do a lot with relatively little JavaScript. Here's
   </article>
 </div>
 
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     close() {
@@ -301,7 +301,7 @@ Try adding some of the other custom elements defined above inside the `<modal-co
 
 ## How can I use this with other JS code though?
 
-Just [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) it! The `<script>` tag in your template is treated as being of `type="module"`, which means you can use any library that's written as an [ESM module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules): of course, you can import modules directly from your site's static assets, but you could also fetch libraries as needed from a CDN such as [Skypack](https://www.skypack.dev/) or [esm.run](https://esm.run/) by jsDelivr.
+Just [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) it! The `<script setup>` tag in your template is treated as being of `type="module"`, which means you can use any library that's written as an [ESM module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules): of course, you can import modules directly from your site's static assets, but you could also fetch libraries as needed from a CDN such as [Skypack](https://www.skypack.dev/) or [esm.run](https://esm.run/) by jsDelivr.
 
 That's the approach taken in the example below: here, we import an ESM build of [PapaParse](https://github.com/mholt/PapaParse) from a CDN, in order to parse our custom element's text content as a CSV string. The rest of our code builds an HTML table from the resulting data object... click on the headers to sort by column!
 
@@ -311,7 +311,7 @@ That's the approach taken in the example below: here, we import an ESM build of 
 
 <table></table>
 
-<script>
+<script setup>
   import Papa from 'https://cdn.jsdelivr.net/npm/papaparse/+esm';
 
   export default class extends HTMLElement {
@@ -446,7 +446,7 @@ No worries: the progressive-enhancement ecosystem has got you covered. Here's th
   </tbody>
 </table>
 
-<script>
+<script setup>
   import Papa from 'https://cdn.jsdelivr.net/npm/papaparse/+esm';
   import * as PetiteVue from 'https://cdn.jsdelivr.net/npm/petite-vue/+esm';
 
@@ -541,7 +541,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
 
 You can prevent Ponys from creating a shadow root on your custom element with the following:
 ```html
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     static disabledFeatures = ['shadow']
@@ -564,7 +564,7 @@ The easy way to handle this for all your custom elements at once: add the follow
 
 You _could_ use a bunch of getter and setter methods for this...
 ```html
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     // For strings, numbers, etc.
@@ -593,7 +593,7 @@ You _could_ use a bunch of getter and setter methods for this...
 
 Using the data attributes suggested by the example above, you could try something like this:
 ```html
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     static observedAttributes = ['data-color', 'data-has-cutie-mark']

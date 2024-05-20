@@ -3,6 +3,9 @@ Declarative creation of browser-native web components.
 
 ## Changelog
 
+- **0.3.6**
+  - Fixed relative imports; component scripts differentiated by `setup` attribute
+
 - **0.3.5**
   - Docs: fixed indentation, getter/setter example
 

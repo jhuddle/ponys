@@ -149,13 +149,13 @@ blockquote {
           class="button" style="margin: 0.5em; color: white; background: crimson"
           href="https://raw.githubusercontent.com/jhuddle/ponys/main/ponys.js"
         >
-          <b>Download</b> <small>(source, 1.8 kB)</small>
+          <b>Download</b> <small>(source, 2.0 kB)</small>
         </a>
         <a download
           class="button" style="margin: 0.5em; color: white; background: seagreen"
           href="https://raw.githubusercontent.com/jhuddle/ponys/main/miniature-ponys.js"
         >
-          <b>Download</b> <small>(minified, 0.9 kB)</small>
+          <b>Download</b> <small>(minified, 1.1 kB)</small>
         </a>
       </p>
       <p>
@@ -319,13 +319,13 @@ Ponys.import('hello-world', './components/hello-world.html');
       <h1>But what about interactivity, styling, etc?</h1>
 
       <p>
-        Any class you can use with <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define"><code>customElements.define()</code></a>, you can use with Ponys. Just add a <code>&lt;script&gt;</code> tag inside your template tag/string/file, and <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export"><code>export</code></a> the class that contains your properties and methods as default - no constructor required.
+        Any class you can use with <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define"><code>customElements.define()</code></a>, you can use with Ponys. Just add a <code>&lt;script&gt;</code> tag with a <code>setup</code> attribute inside your template tag/string/file, and <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export"><code>export</code></a> the class that contains your properties and methods as default - no constructor required.
       </p>
       <p>
         Likewise with <code>&lt;style&gt;</code>! Ponys will put your component's elements behind a <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM">shadow root</a> wherever possible, so your CSS is fully encapsulated.
       </p>
       <p>
-        Here's an example of an inline template with a <code>&lt;script&gt;</code> tag, which extends the built-in <code>&lt;button&gt;</code> element (<a target="spec" href="https://bugs.webkit.org/show_bug.cgi?id=182671">not supported in Safari</a>):
+        Here's an example of an inline template with a <code>&lt;script setup&gt;</code> tag, which extends the built-in <code>&lt;button&gt;</code> element (<a target="spec" href="https://bugs.webkit.org/show_bug.cgi?id=182671">not supported in Safari</a>):
       </p>
 
       <h2>Counter button</h2>
@@ -337,7 +337,7 @@ Ponys.import('hello-world', './components/hello-world.html');
 
   Count: <b id="count"></b>
 
-  <script>
+  <script setup>
     export default class extends HTMLButtonElement {
 
       count = 0
@@ -436,7 +436,7 @@ Ponys.import('modal-container', './components/modal-container.html');
       <h1>How can I use this with other JS code though?</h1>
 
       <p>
-        Just <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"><code>import</code></a> it! The <code>&lt;script&gt;</code> tag in your template is treated as being of <code>type="module"</code>, which means you can use any library that's written as an <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">ESM module</a>: of course, you can import modules directly from your site's static assets, but you could also fetch libraries as needed from a CDN such as <a target="cdn" href="https://www.skypack.dev/">Skypack</a> or <a target="cdn" href="https://esm.run/">esm.run</a> by jsDelivr.
+        Just <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import"><code>import</code></a> it! The <code>&lt;script setup&gt;</code> tag in your template is treated as being of <code>type="module"</code>, which means you can use any library that's written as an <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">ESM module</a>: of course, you can import modules directly from your site's static assets, but you could also fetch libraries as needed from a CDN such as <a target="cdn" href="https://www.skypack.dev/">Skypack</a> or <a target="cdn" href="https://esm.run/">esm.run</a> by jsDelivr.
       </p>
       <p>
         That's the approach taken in the example below: here, we import an ESM build of <a target="github" href="https://github.com/mholt/PapaParse">PapaParse</a> from a CDN, in order to parse our custom element's text content as a CSV string. The rest of our code builds an HTML table from the resulting data object... click on the headers to sort by column!
@@ -525,7 +525,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
           <p><i>...choose not to use a shadow root?</i></p>
           <p>You can prevent Ponys from creating a shadow root on your custom element with the following:</p>
 <script type="text/plain" class="code">
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     static disabledFeatures = ['shadow']
@@ -546,7 +546,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
           <p><i>...reflect properties as attributes, and vice-versa?</i></p>
           <p>You <em>could</em> use a bunch of <a target="mdn" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#defining_getters_and_setters">getter and setter methods</a> for this...</p>
 <script type="text/plain" class="code">
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     // For strings, numbers, etc.
@@ -573,7 +573,7 @@ Ponys.import('csv-table-vue', './components/csv-table-vue.html');
           <p><i>...trigger behavior when an attribute/property is changed?</i></p>
           <p>Using the data attributes suggested by the example above, you could try something like this:</p>
 <script type="text/plain" class="code">
-<script>
+<script setup>
   export default class extends HTMLElement {
 
     static observedAttributes = ['data-color', 'data-has-cutie-mark']

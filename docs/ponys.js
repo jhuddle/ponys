@@ -1,30 +1,32 @@
-/* ponys v0.3.4
- * 2022 jhuddle
+/* ponys v0.3.6
+ * 2024 jhuddle
  *
  * Declarative creation of browser-native web components.
  */
 
 
-let _ = document;
-
-
 export default class {
 
-	static define(name, template, options)
+	static define(name, template, options, url = '')
 	{
 		if (!template.content) {
-			let templateElement = _.createElement('template');
+			let templateElement = document.createElement('template');
 			templateElement.innerHTML = template;
 			template = templateElement;
 		}
 		template = template.content;
 
-		let script = template.querySelector('script') || 0;
+		let script = template.querySelector('script[setup]') || template.querySelector('script');
 
-		return import('data:text/javascript;base64,'+ btoa(script.text)).then(module => {
-			if (script) {
-				script.remove();
-			}
+		return import(
+			'data:text/javascript;base64,' + btoa(
+				script?.text?.replace(
+					/(?<=(import|from)\s*?("|'))\.{0,2}\/.*?[^\\](?=\2)/g,  // relative imports
+					match => new URL(match, new URL(url, location.origin))
+				)
+			)
+		).then(module => {
+			script?.remove();
 			class Component extends (module.default || HTMLElement) {
 				constructor() {
 					super();
@@ -42,7 +44,7 @@ export default class {
 		});
 	}
 
-	static defineAll(container = _)
+	static defineAll(container = document)
 	{
 		return Promise.allSettled(
 			[...container.querySelectorAll('template[name]')].map(template => {
@@ -61,7 +63,7 @@ export default class {
 	{
 		return fetch(url)
 			.then(response => response.ok ? response.text() : Promise.reject(Error(url)))
-			.then(text => this.define(name, text, options));
+			.then(text => this.define(name, text, options, url));
 	}
 
 }
