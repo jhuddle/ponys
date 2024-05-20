@@ -1,4 +1,4 @@
-/* ponys v0.3.6a
+/* ponys v0.3.6
  * 2024 jhuddle
  *
  * Declarative creation of browser-native web components.
@@ -16,7 +16,7 @@ export default class {
 		}
 		template = template.content;
 
-		let script = template.querySelector('script');
+		let script = template.querySelector('script[setup]') || template.querySelector('script');
 
 		return import(
 			'data:text/javascript;base64,' + btoa(
