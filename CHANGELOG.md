@@ -3,6 +3,9 @@ Declarative creation of browser-native web components.
 
 ## Changelog
 
+- **0.3.7**
+  - Updated relative import regex to avoid lookbehind
+
 - **0.3.6**
   - Fixed relative imports; component scripts differentiated by `setup` attribute
 

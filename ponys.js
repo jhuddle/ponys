@@ -1,4 +1,4 @@
-/* ponys v0.3.6
+/* ponys v0.3.7
  * 2024 jhuddle
  *
  * Declarative creation of browser-native web components.
@@ -15,14 +15,15 @@ export default class {
 			template = templateElement;
 		}
 		template = template.content;
+		url = new URL(url, location.href);
 
 		let script = template.querySelector('script[setup]') || template.querySelector('script');
 
 		return import(
 			'data:text/javascript;base64,' + btoa(
 				script?.text?.replace(
-					/(?<=(import|from)\s*?("|'))\.{0,2}\/.*?[^\\](?=\2)/g,  // relative imports
-					match => new URL(match, new URL(url, location.origin))
+					/(import|from)\s*("|')(\.{0,2}\/.*?[^\\])\2/g,  // relative imports
+					(match, keyword, quote, path) => keyword + quote + new URL(path, url) + quote
 				)
 			)
 		).then(module => {
