@@ -149,7 +149,7 @@ blockquote {
           class="button" style="margin: 0.5em; color: white; background: crimson"
           href="https://raw.githubusercontent.com/jhuddle/ponys/main/ponys.js"
         >
-          <b>Download</b> <small>(source, 2.0 kB)</small>
+          <b>Download</b> <small>(source, 2.1 kB)</small>
         </a>
         <a download
           class="button" style="margin: 0.5em; color: white; background: seagreen"
@@ -295,7 +295,10 @@ Hello, <slot>world</slot>!
 
 import Ponys from './ponys.js';
 
-Ponys.import('hello-world', './components/hello-world.html');
+Ponys.import(
+  'hello-world',
+  import.meta.resolve('./components/hello-world.html')
+);
 </script>
           <p>
             - or in your HTML, by adding a <code>src</code> attribute to a named template element:
@@ -392,7 +395,10 @@ Ponys.import('hello-world', './components/hello-world.html');
 
 import Ponys from './ponys.js';
 
-Ponys.import('modal-container', './components/modal-container.html');
+Ponys.import(
+  'modal-container',
+  import.meta.resolve('./components/modal-container.html')
+);
 </script>
       </details>
 <script type="text/plain" class="code input">
@@ -453,7 +459,10 @@ Ponys.import('modal-container', './components/modal-container.html');
 
 import Ponys from './ponys.js';
 
-Ponys.import('csv-table', './components/csv-table.html');
+Ponys.import(
+  'csv-table',
+  import.meta.resolve('./components/csv-table.html')
+);
 </script>
       </details>
 <script type="text/plain" class="code input">
@@ -494,7 +503,10 @@ Ponys.import('csv-table', './components/csv-table.html');
 
 import Ponys from './ponys.js';
 
-Ponys.import('csv-table-vue', './components/csv-table-vue.html');
+Ponys.import(
+  'csv-table-vue',
+  import.meta.resolve('./components/csv-table-vue.html')
+);
 </script>
       </details>
 <script type="text/plain" class="code input">

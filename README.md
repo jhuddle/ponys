@@ -89,7 +89,10 @@ Wouldn't it be cool if browsers let you do that? 🤔
 
   import Ponys from './ponys.js';
 
-  Ponys.import('hello-world', './components/hello-world.html');
+  Ponys.import(
+    'hello-world',
+    import.meta.resolve('./components/hello-world.html')
+  );
   ```
 
   \- or in your HTML, by adding a `src` attribute to a named template element:
@@ -262,7 +265,10 @@ With this capability, you can do a lot with relatively little JavaScript. Here's
 
 import Ponys from './ponys.js';
 
-Ponys.import('modal-container', './components/modal-container.html');
+Ponys.import(
+  'modal-container',
+  import.meta.resolve('./components/modal-container.html')
+);
 ```
 ```html
 <style>
@@ -396,7 +402,10 @@ That's the approach taken in the example below: here, we import an ESM build of 
 
 import Ponys from './ponys.js';
 
-Ponys.import('csv-table', './components/csv-table.html');
+Ponys.import(
+  'csv-table',
+  import.meta.resolve('./components/csv-table.html')
+);
 ```
 ```html
 <csv-table
@@ -435,7 +444,7 @@ No worries: the progressive-enhancement ecosystem has got you covered. Here's th
         role="button"
         :title="'Sort by '+ value"
         @click="sort(col)"
-        @keydown="$event.key === 'Enter' && $el.click()"
+        @keydown.enter="sort(col)"
       >{{ value }}</th>
     </tr>
   </thead>
@@ -513,7 +522,10 @@ No worries: the progressive-enhancement ecosystem has got you covered. Here's th
 
 import Ponys from './ponys.js';
 
-Ponys.import('csv-table-vue', './components/csv-table-vue.html');
+Ponys.import(
+  'csv-table-vue',
+  import.meta.resolve('./components/csv-table-vue.html')
+);
 ```
 ```html
 <csv-table-vue

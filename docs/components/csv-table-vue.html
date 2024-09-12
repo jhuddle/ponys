@@ -9,7 +9,7 @@
 				role="button"
 				:title="'Sort by '+ value"
 				@click="sort(col)"
-				@keydown="$event.key === 'Enter' && $el.click()"
+				@keydown.enter="sort(col)"
 			>{{ value }}</th>
 		</tr>
 	</thead>
