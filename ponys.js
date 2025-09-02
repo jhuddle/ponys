@@ -28,7 +28,13 @@ export default class {
 			)
 		).then(module => {
 			script?.remove();
-			class Component extends (module.default || HTMLElement) {
+			class BaseComponent extends (module.default?.prototype instanceof HTMLElement ? module.default : HTMLElement) { }
+			for (let prop in module) {
+				if (prop === "default" || prop === "constructor") continue;
+				if (prop === "disabledFeatures") BaseComponent[prop] = module[prop]; // static class property
+				else BaseComponent.prototype[prop] = module[prop];
+			}
+			class Component extends BaseComponent {
 				constructor() {
 					super();
 					let root = this;
@@ -38,6 +44,7 @@ export default class {
 					let content = template.cloneNode(true);
 					propagateHost(this, content);
 					root.append(content);
+					this.init?.();
 				}
 			}
 			customElements.define(name, Component, options);
