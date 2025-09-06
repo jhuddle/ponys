@@ -3,6 +3,11 @@ Declarative creation of browser-native web components.
 
 ## Changelog
 
+- **0.3.8**
+  - Now uses `blob:` instead of `data:` URIs to dynamically import script
+  - Improved console warnings
+  - Bugfix: use `document.baseURI` in place of `location.href` as base for rewriting relative imports
+
 - **0.3.7**
   - Updated relative import regex to avoid lookbehind
 
