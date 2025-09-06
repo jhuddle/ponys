@@ -15,34 +15,38 @@ export default class {
 			template = templateElement;
 		}
 		template = template.content;
-		url = new URL(url, location.href);
+		url = new URL(url, document.baseURI);
 
 		let script = template.querySelector('script[setup]') || template.querySelector('script');
 
-		return import(
-			'data:text/javascript;base64,' + btoa(
+		let blobURL = URL.createObjectURL(
+			new Blob([
 				script?.text?.replace(
 					/(import|from)\s*("|')(\.{0,2}\/.*?[^\\])\2/g,  // relative imports
 					(match, keyword, quote, path) => keyword + quote + new URL(path, url) + quote
 				)
-			)
-		).then(module => {
-			script?.remove();
-			class Component extends (module.default || HTMLElement) {
-				constructor() {
-					super();
-					let root = this;
-					try { root = root.attachShadow({mode: 'open'}); } catch {}
-					this.$ = selector => root.querySelector(selector);
-					this.$$ = selector => root.querySelectorAll(selector);
-					let content = template.cloneNode(true);
-					propagateHost(this, content);
-					root.append(content);
+			], {type: 'text/javascript'})
+		);
+
+		return import(`${blobURL}#${name}`)
+			.then(module => {
+				script?.remove();
+				class Component extends (module.default || HTMLElement) {
+					constructor() {
+						super();
+						let root = this;
+						try { root = root.attachShadow({mode: 'open'}); } catch {}
+						this.$ = selector => root.querySelector(selector);
+						this.$$ = selector => root.querySelectorAll(selector);
+						let content = template.cloneNode(true);
+						propagateHost(this, content);
+						root.append(content);
+					}
 				}
-			}
-			customElements.define(name, Component, options);
-			return Component;
-		});
+				customElements.define(name, Component, options);
+				return Component;
+			})
+			.finally(() => URL.revokeObjectURL(blobURL));
 	}
 
 	static defineAll(container = document)
