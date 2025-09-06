@@ -57,13 +57,16 @@ export default class {
 					this.import(options.name, options.src, options):
 					this.define(options.name, template, options);
 			})
+		)
+		.then(results => results
+			.forEach(result => result.reason && console.error(result.reason))
 		);
 	}
 
 	static import(name, url, options)
 	{
 		return fetch(url)
-			.then(response => response.ok ? response.text() : Promise.reject(Error(url)))
+			.then(response => response.ok ? response.text() : Promise.reject(URIError(url)))
 			.then(text => this.define(name, text, options, url));
 	}
 
