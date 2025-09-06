@@ -9,7 +9,6 @@ export default class {
 
 	static define(name, template, options, url = '')
 	{
-		if (customElements.get(name)) return Promise.reject(Error(`Component '${name}' already registered`));
 		if (!template.content) {
 			let templateElement = document.createElement('template');
 			templateElement.innerHTML = template;
@@ -19,7 +18,6 @@ export default class {
 		url = new URL(url, location.href);
 
 		let script = template.querySelector('script[setup]') || template.querySelector('script');
-		if (script && (!script.hasAttribute("setup") || script.type != "module")) console.warn("setup & type=module attributes expected");
 
 		return import(
 			'data:text/javascript;base64,' + btoa(
@@ -59,16 +57,16 @@ export default class {
 					this.import(options.name, options.src, options):
 					this.define(options.name, template, options);
 			})
-		).then(list => {
-			list?.filter(e => e.status !== "fulfilled")
-				.forEach(e => console.warn("import/define failed", e));
-		});
+		)
+		.then(results => results
+			.forEach(result => result.reason && console.error(result.reason))
+		);
 	}
 
 	static import(name, url, options)
 	{
 		return fetch(url)
-			.then(response => response.ok ? response.text() : Promise.reject(Error(url)))
+			.then(response => response.ok ? response.text() : Promise.reject(URIError(url)))
 			.then(text => this.define(name, text, options, url));
 	}
 
